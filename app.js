@@ -8,7 +8,7 @@ const adminrouter = require("./routes/adminrouter");
 const app = express();
 
 const corsOptions ={
-  origin: ["http://localhost:3000, https://lyrics-tc8m.onrender.com"],
+  origin: ["http://localhost:3000"],
   methods: ["GET", "POST", "PUT", "DELETE"],
   allowedHeaders:"Content-Type,Authorization",
   optionsSuccessStatus:200,

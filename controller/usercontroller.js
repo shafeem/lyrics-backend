@@ -1,4 +1,5 @@
 const userSchema = require("../model/user");
+const Role = require("../model/role");
 const jwt = require("jsonwebtoken");
 
 require("dotenv").config();
@@ -6,19 +7,17 @@ require("dotenv").config();
 const userlogin = async (req, res) => {
   try {
     let userId;
+    let userType;
 
-    console.log(
-      req.body.datas.data.email,
-      "this is the main data shafeem shan"
-    );
     const { name, email } = req.body.datas.data;
 
     const user = await userSchema.findOne({ email: email });
 
     if (user) {
       console.log("user already exist");
-      console.log(user);
+
       userId = user._id;
+      userType = user.type;
     } else {
       console.log("user not exist ");
       const newUser = new userSchema({
@@ -29,6 +28,7 @@ const userlogin = async (req, res) => {
 
       const user = await userSchema.findOne({ email: email });
       userId = user._id;
+      userType = user.type;
     }
     const token = jwt.sign({ userId }, process.env.JWT_SECREAT_KEY, {
       expiresIn: 86400,
@@ -39,8 +39,8 @@ const userlogin = async (req, res) => {
       token: token,
       name: name,
       email: email,
-      status: "success",
-      message: "new user",
+      userId: userId,
+      userType: userType,
     });
   } catch (error) {
     console.log(error.message);
@@ -48,16 +48,17 @@ const userlogin = async (req, res) => {
 };
 
 const verifyNumber = async (req, res) => {
-    console.log(req.body);
-  const {number} = req.body
-  console.log(number, "this is the number here");
+  console.log(req.body);
+  const { number } = req.body;
 
   const user = await userSchema.findOne({ number: number });
   let userId;
+  let userType;
 
   if (user) {
     console.log("existing user here");
     userId = user._id;
+    userType = user.type;
   } else {
     console.log("user not existing here");
     const newUser = new userSchema({
@@ -66,17 +67,39 @@ const verifyNumber = async (req, res) => {
     await newUser.save();
 
     const user = await userSchema.findOne({ number: number });
+
     userId = user._id;
+    userType = user.type;
   }
   const token = jwt.sign({ userId }, process.env.JWT_SECREAT_KEY, {
     expiresIn: 86400,
   });
 
-  res.json({ auth: true, token: token, status: "success" });
+  res.json({
+    auth: true,
+    token: token,
+    status: "success",
+    userType: userType,
+    userId: userId,
+  });
 };
 
+const roleChanger = async (req, res) => {
+  const { id } = req.body;
+  console.log(id, "this is the id here");
+
+  await userSchema
+    .updateOne({ _id: id }, { $set: { type: Role.artist } })
+    .then(() => {
+      console.log("role changed successfully ");
+      res.json({
+        userType: Role.artist,
+      });
+    });
+};
 
 module.exports = {
   userlogin,
   verifyNumber,
+  roleChanger,
 };

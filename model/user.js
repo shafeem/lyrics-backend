@@ -1,4 +1,6 @@
 const mongoose = require('mongoose');
+const Role = require('./role');
+
 
 const userSchema = new mongoose.Schema({
     name: {
@@ -10,6 +12,10 @@ const userSchema = new mongoose.Schema({
     },
     number:{
         type: Number,
+    },
+    type:{
+        type:String,
+        default: Role.user
     }
 })
 
