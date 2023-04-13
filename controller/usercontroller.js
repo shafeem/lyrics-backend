@@ -8,6 +8,7 @@ const userlogin = async (req, res) => {
   try {
     let userId;
     let userType;
+    let profile;
 
     const { name, email } = req.body.datas.data;
 
@@ -18,6 +19,7 @@ const userlogin = async (req, res) => {
 
       userId = user._id;
       userType = user.type;
+      profile = user.profile;
     } else {
       console.log("user not exist ");
       const newUser = new userSchema({
@@ -29,6 +31,7 @@ const userlogin = async (req, res) => {
       const user = await userSchema.findOne({ email: email });
       userId = user._id;
       userType = user.type;
+      profile = user.profile;
     }
     const token = jwt.sign({ userId }, process.env.JWT_SECREAT_KEY, {
       expiresIn: 86400,
@@ -41,6 +44,7 @@ const userlogin = async (req, res) => {
       email: email,
       userId: userId,
       userType: userType,
+      profile: profile,
     });
   } catch (error) {
     console.log(error.message);
@@ -54,11 +58,13 @@ const verifyNumber = async (req, res) => {
   const user = await userSchema.findOne({ number: number });
   let userId;
   let userType;
+  let profile;
 
   if (user) {
     console.log("existing user here");
     userId = user._id;
     userType = user.type;
+    profile = user.profile;
   } else {
     console.log("user not existing here");
     const newUser = new userSchema({
@@ -70,6 +76,7 @@ const verifyNumber = async (req, res) => {
 
     userId = user._id;
     userType = user.type;
+    profile = user.profile;
   }
   const token = jwt.sign({ userId }, process.env.JWT_SECREAT_KEY, {
     expiresIn: 86400,
@@ -81,6 +88,7 @@ const verifyNumber = async (req, res) => {
     status: "success",
     userType: userType,
     userId: userId,
+    profile: profile,
   });
 };
 
@@ -89,17 +97,58 @@ const roleChanger = async (req, res) => {
   console.log(id, "this is the id here");
 
   await userSchema
-    .updateOne({ _id: id }, { $set: { type: Role.artist } })
+    .updateOne({ _id: id }, { $set: { type: "pending" } })
     .then(() => {
       console.log("role changed successfully ");
       res.json({
-        userType: Role.artist,
+        // userType: Role.artist,
+        userType: "pending",
       });
     });
+};
+
+const profileSubmit = async (req, res) => {
+  try {
+    const { name, email, dob, mobile, location, language, id,imgUrl } = req.body;
+    console.log(req.body, "the body here");
+
+    const user = await userSchema.findByIdAndUpdate(
+      id,
+      {
+        name: name,
+        email: email,
+        number: mobile,
+        profile: true,
+        dob: dob,
+        location: location,
+        language: language,
+        imgUrl:imgUrl
+      },
+      {
+        new: true,
+      }
+    );
+
+    console.log(user, "the user here");
+  } catch (error) {
+    console.log(error, "Error");
+  }
+};
+
+const dataCollector = async (req, res) => {
+  const { userId } = req.body;
+
+  const alldata = await userSchema.findOne({_id:userId})
+
+  console.log(alldata,'the all data');
+
+  res.json({data:alldata})
 };
 
 module.exports = {
   userlogin,
   verifyNumber,
   roleChanger,
+  profileSubmit,
+  dataCollector,
 };
