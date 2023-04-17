@@ -1,4 +1,5 @@
 const jwt = require("jsonwebtoken");
+const userSchema = require("../model/user");
 
 const adminLogin = async (req, res) => {
   try {
@@ -36,6 +37,22 @@ const adminLogin = async (req, res) => {
   }
 };
 
+const userFinder = async (req, res) => {
+  const details = await userSchema.find();
+  console.log(details, "the details here");
+
+  res.json({ data: details });
+};
+
+const artistApprover = async (req, res) => {
+  console.log("its working");
+  const id = req.body.data[0]._id;
+
+  await userSchema.updateOne({ _id: id }, { $set: { type: "artist" } });
+};
+
 module.exports = {
   adminLogin,
+  userFinder,
+  artistApprover,
 };
