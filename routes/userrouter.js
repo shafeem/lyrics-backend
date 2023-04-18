@@ -7,6 +7,7 @@ const {
   roleChanger,
   profileSubmit,
   dataCollector,
+  songSubmitter,
 } = require("../controller/usercontroller");
 
 const router = express.Router();
@@ -18,6 +19,7 @@ router.post("/verifynumber", verifyNumber);
 router.post("/rolechanger", roleChanger);
 router.post("/profileSubmit",profileSubmit)
 router.post("/dataCollector",dataCollector)
+router.post("/songSubmitter",songSubmitter)
 
 
 

@@ -1,8 +1,10 @@
 const express = require("express");
 
-const { adminLogin,userFinder,artistApprover } = require("../controller/admincontroller");
+const { adminLogin,userFinder,artistApprover,songFinder, } = require("../controller/admincontroller");
 
 const router = express.Router();
+
+router.get("/songFinder",songFinder)
 
 router.post("/adminVerify", adminLogin);
 router.post("/userFinder",userFinder)

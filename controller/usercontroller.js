@@ -1,6 +1,7 @@
 const userSchema = require("../model/user");
 const Role = require("../model/role");
 const jwt = require("jsonwebtoken");
+const songSchema = require("../model/song");
 
 require("dotenv").config();
 
@@ -109,7 +110,8 @@ const roleChanger = async (req, res) => {
 
 const profileSubmit = async (req, res) => {
   try {
-    const { name, email, dob, mobile, location, language, id,imgUrl } = req.body;
+    const { name, email, dob, mobile, location, language, id, imgUrl } =
+      req.body;
     console.log(req.body, "the body here");
 
     const user = await userSchema.findByIdAndUpdate(
@@ -122,7 +124,7 @@ const profileSubmit = async (req, res) => {
         dob: dob,
         location: location,
         language: language,
-        imgUrl:imgUrl
+        imgUrl: imgUrl,
       },
       {
         new: true,
@@ -138,11 +140,42 @@ const profileSubmit = async (req, res) => {
 const dataCollector = async (req, res) => {
   const { userId } = req.body;
 
-  const alldata = await userSchema.findOne({_id:userId})
+  const alldata = await userSchema.findOne({ _id: userId });
 
-  console.log(alldata,'the all data');
+  console.log(alldata, "the all data");
 
-  res.json({data:alldata})
+  res.json({ data: alldata });
+};
+
+const songSubmitter = async (req, res) => {
+  console.log(req.body, "the song body here ");
+  const { songName, artistName, language, genre, songImg, songAudio, userId } =
+    req.body;
+
+  console.log(
+    songName,
+    artistName,
+    language,
+    genre,
+    songImg,
+    songAudio,
+    userId,
+    "all the details here"
+  );
+
+  const songUpload = new songSchema({
+        artists: userId,
+        images:{
+          coverart:songImg
+        },
+        title:songName,
+        subtitle:artistName,
+        url:songAudio,
+        language:language,
+        genre:genre,
+  });
+
+  await songUpload.save();
 };
 
 module.exports = {
@@ -151,4 +184,5 @@ module.exports = {
   roleChanger,
   profileSubmit,
   dataCollector,
+  songSubmitter,
 };
