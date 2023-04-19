@@ -55,7 +55,11 @@ const artistApprover = async (req, res) => {
 const songFinder = async (req, res) => {
   const songs = await songSchema.find();
 
-  res.json({ song: songs });
+  res.json({ tracks: songs });
+};
+
+const playlistSubmitter = async (req, res) => {
+  console.log(req.body, "the body here");
 };
 
 module.exports = {
@@ -63,4 +67,5 @@ module.exports = {
   userFinder,
   artistApprover,
   songFinder,
+  playlistSubmitter,
 };

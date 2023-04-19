@@ -144,7 +144,10 @@ const dataCollector = async (req, res) => {
 
   console.log(alldata, "the all data");
 
-  res.json({ data: alldata });
+  const songData = await songSchema.find({ artists: userId });
+  console.log(songData, "the songData");
+
+  res.json({ data: alldata, tracks: songData });
 };
 
 const songSubmitter = async (req, res) => {
@@ -164,15 +167,15 @@ const songSubmitter = async (req, res) => {
   );
 
   const songUpload = new songSchema({
-        artists: userId,
-        images:{
-          coverart:songImg
-        },
-        title:songName,
-        subtitle:artistName,
-        url:songAudio,
-        language:language,
-        genre:genre,
+    artists: userId,
+    images: {
+      coverart: songImg,
+    },
+    title: songName,
+    subtitle: artistName,
+    url: songAudio,
+    language: language,
+    genre: genre,
   });
 
   await songUpload.save();
