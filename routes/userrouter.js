@@ -8,11 +8,18 @@ const {
   profileSubmit,
   dataCollector,
   songSubmitter,
+  songFinder,
+  createPlaylist,
+  addPlaylistSong,
+  playlistSubmitter,
+  deletePlaylistSongs,
+  getPlaylists,
 } = require("../controller/usercontroller");
 
 const router = express.Router();
 
-
+router.get("/songFinder" ,songFinder)
+router.get("/getPlaylists",getPlaylists)
 
 router.post("/googleAuth", userlogin);
 router.post("/verifynumber", verifyNumber);
@@ -20,6 +27,10 @@ router.post("/rolechanger", roleChanger);
 router.post("/profileSubmit",profileSubmit)
 router.post("/dataCollector",dataCollector)
 router.post("/songSubmitter",songSubmitter)
+router.post("/createPlaylist",createPlaylist)
+router.post("/addPlaylistSong",addPlaylistSong)
+router.post("/playlistSubmitter",playlistSubmitter)
+router.post("/deletePlaylistSongs",deletePlaylistSongs)
 
 
 

@@ -1,18 +1,24 @@
 const mongoose = require("mongoose")
 
-const playlistShema = new mongoose.Schema({
+const playlistSchema = new mongoose.Schema({
     image:{
         type:String
     },
     name:{
         type:String
     },
-    song:[{
+    songs:[{
         type:mongoose.Schema.Types.ObjectId,
-        ref:"Song"
-    }]
+        ref:"Song",
+        unique: true,
+    }],
+    owner:{
+        type:mongoose.Schema.Types.ObjectId,
+        ref:"User",
+        required:true
+    }
 })
 
-const Playlist = mongoose.model("Playlist",playlistShema);
+const Playlist = mongoose.model("Playlist",playlistSchema);
 
 module.exports = Playlist;

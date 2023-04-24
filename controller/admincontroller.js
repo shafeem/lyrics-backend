@@ -1,6 +1,7 @@
 const jwt = require("jsonwebtoken");
 const userSchema = require("../model/user");
 const songSchema = require("../model/song");
+const playlistShema = require('../model/playlist')
 
 const adminLogin = async (req, res) => {
   try {
@@ -58,14 +59,11 @@ const songFinder = async (req, res) => {
   res.json({ tracks: songs });
 };
 
-const playlistSubmitter = async (req, res) => {
-  console.log(req.body, "the body here");
-};
 
 module.exports = {
   adminLogin,
   userFinder,
   artistApprover,
   songFinder,
-  playlistSubmitter,
+
 };
