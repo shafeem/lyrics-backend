@@ -19,8 +19,9 @@ const {
 const router = express.Router();
 
 router.get("/songFinder" ,songFinder)
-router.get("/getPlaylists",getPlaylists)
 
+
+router.post("/getPlaylists",getPlaylists)
 router.post("/googleAuth", userlogin);
 router.post("/verifynumber", verifyNumber);
 router.post("/rolechanger", roleChanger);

@@ -10,7 +10,6 @@ const playlistSchema = new mongoose.Schema({
     songs:[{
         type:mongoose.Schema.Types.ObjectId,
         ref:"Song",
-        unique: true,
     }],
     owner:{
         type:mongoose.Schema.Types.ObjectId,

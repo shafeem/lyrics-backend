@@ -199,75 +199,71 @@ const createPlaylist = async (req, res) => {
   res.json({ playlistId: playlistId });
 };
 
-const 
-addPlaylistSong = async (req, res) => {
-  console.log(req.body, "the body here");
-
+const addPlaylistSong = async (req, res) => {
   const { playlistId, songId } = req.body;
-
-  // const playlist = await playlistSchema.findOneAndUpdate(
-  //   { _id: playlistId },
-  //   { $push: { song: songId } },
-  //   { new: true, upsert: true }
-  // );
-  console.log(songId,'the songid herere');
 
   const playlist = await playlistSchema.findOne({ _id: playlistId });
 
-  if (playlist.songs.includes(songId)) {
+  if (playlist?.songs?.includes(songId)) {
     console.log("already have the same song here");
   } else {
     playlist.songs.push(songId);
-    playlist.save();
-    console.log(playlist, "the playlist here");
+    try {
+      await playlist.save();
+      console.log(playlist, "the playlist here");
+    } catch (error) {
+      console.error(error);
+    }
   }
-
-  console.log(playlist, "the playlist here");
 };
 
 const playlistSubmitter = async (req, res) => {
   const { playlistImg, playlistName, playId, userId } = req.body;
   console.log(req.body, "the datas here", playlistImg);
 
-  const play = await playlistSchema.findOneAndUpdate(
-    { _id: playId },
-    {
-      image: playlistImg,
-      name: playlistName,
-    },
-    {
-      new: true,
-    }
-  );
-  console.log(play, "the play");
-  res.json({message :true})
+  const play = await playlistSchema
+    .findOneAndUpdate(
+      { _id: playId },
+      {
+        image: playlistImg,
+        name: playlistName,
+      },
+      {
+        new: true,
+      }
+    )
+    .then(() => {
+      res.json({ message: true });
+      console.log("all settled here");
+    });
 };
 
-const deletePlaylistSongs =async (req,res)=>{
-  const {songId,playlistId} = req.body;
+const deletePlaylistSongs = async (req, res) => {
+  const { songId, playlistId } = req.body;
 
-  console.log('the response',req.body);
+  try {
+    const playlist = await playlistSchema.findOne({ _id: playlistId });
 
-  const play = await playlistSchema.findOne({_id:songId});
-
-  if (play.songs.includes(songId)) {
-    console.log("already have the song here");
-
-    const playlist = await playlistSchema.updateOne({_id:playlistId},{
-      $pull:{songs:songId}
-    }).then(()=>{
-      console.log('finished the work here');
-    })
-
-  } else {
-
-    console.log(play, "there is no it therers");
+    if (playlist && playlist.songs.includes(songId)) {
+      const index = playlist.songs.indexOf(songId);
+      playlist.songs.splice(index, 1);
+      await playlist.save();
+      console.log("Song deleted from playlist");
+    } else {
+      console.log("Song not found in playlist");
+    }
+  } catch (error) {
+    console.error(error);
   }
-}
+};
 
-const getPlaylists = (req,res)=>{
-  
-}
+const getPlaylists = async (req, res) => {
+  console.log(req.body, "the body here");
+  const { userId } = req.body;
+  const datas = await playlistSchema.find({ owner: userId }).populate("songs");
+  console.log(datas);
+  res.json({ data: datas });
+};
 
 module.exports = {
   userlogin,
