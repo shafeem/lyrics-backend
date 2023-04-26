@@ -249,6 +249,9 @@ const deletePlaylistSongs = async (req, res) => {
       playlist.songs.splice(index, 1);
       await playlist.save();
       console.log("Song deleted from playlist");
+      const Playlists =  await playlistSchema.findOne({_id:playlistId}).populate("songs")
+      const updatedPlaylist = Playlists.songs
+      res.json({updatedPlaylist})
     } else {
       console.log("Song not found in playlist");
     }
