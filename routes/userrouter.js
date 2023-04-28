@@ -14,6 +14,7 @@ const {
   playlistSubmitter,
   deletePlaylistSongs,
   getPlaylists,
+  deletePlaylist,
 } = require("../controller/usercontroller");
 
 const router = express.Router();
@@ -32,6 +33,7 @@ router.post("/createPlaylist",createPlaylist)
 router.post("/addPlaylistSong",addPlaylistSong)
 router.post("/playlistSubmitter",playlistSubmitter)
 router.post("/deletePlaylistSongs",deletePlaylistSongs)
+router.post("/deletePlaylist",deletePlaylist)
 
 
 

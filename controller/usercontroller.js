@@ -3,6 +3,7 @@ const Role = require("../model/role");
 const jwt = require("jsonwebtoken");
 const songSchema = require("../model/song");
 const playlistSchema = require("../model/playlist");
+const { default: mongoose } = require("mongoose");
 
 require("dotenv").config();
 
@@ -268,6 +269,19 @@ const getPlaylists = async (req, res) => {
   res.json({ data: datas });
 };
 
+const deletePlaylist = async (req,res)=>{
+  console.log(req.body,'the body here')
+  const {playlistId,userId} = req.body;
+const id= new mongoose.Types.ObjectId(playlistId)
+
+  console.log('the play here',playlistId)
+  const delPlaylist =  await playlistSchema.deleteOne({_id:playlistId});
+
+  const datas = await playlistSchema.find({owner:userId}).populate('songs')
+
+  res.json({datas:datas})
+}
+
 module.exports = {
   userlogin,
   verifyNumber,
@@ -281,4 +295,5 @@ module.exports = {
   playlistSubmitter,
   deletePlaylistSongs,
   getPlaylists,
+  deletePlaylist,
 };
