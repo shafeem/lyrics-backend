@@ -250,9 +250,11 @@ const deletePlaylistSongs = async (req, res) => {
       playlist.songs.splice(index, 1);
       await playlist.save();
       console.log("Song deleted from playlist");
-      const Playlists =  await playlistSchema.findOne({_id:playlistId}).populate("songs")
-      const updatedPlaylist = Playlists.songs
-      res.json({updatedPlaylist})
+      const Playlists = await playlistSchema
+        .findOne({ _id: playlistId })
+        .populate("songs");
+      const updatedPlaylist = Playlists.songs;
+      res.json({ updatedPlaylist });
     } else {
       console.log("Song not found in playlist");
     }
@@ -269,17 +271,43 @@ const getPlaylists = async (req, res) => {
   res.json({ data: datas });
 };
 
-const deletePlaylist = async (req,res)=>{
-  console.log(req.body,'the body here')
-  const {playlistId,userId} = req.body;
-const id= new mongoose.Types.ObjectId(playlistId)
+const deletePlaylist = async (req, res) => {
+  console.log(req.body, "the body here");
+  const { playlistId, userId } = req.body;
+  const id = new mongoose.Types.ObjectId(playlistId);
 
-  console.log('the play here',playlistId)
-  const delPlaylist =  await playlistSchema.deleteOne({_id:playlistId});
+  console.log("the play here", playlistId);
+  const delPlaylist = await playlistSchema.deleteOne({ _id: playlistId });
 
-  const datas = await playlistSchema.find({owner:userId}).populate('songs')
+  const datas = await playlistSchema.find({ owner: userId }).populate("songs");
 
-  res.json({datas:datas})
+  res.json({ datas: datas });
+};
+
+const deleteSongs = async (req, res) => {
+  const { songId, userId } = req.body;
+
+  const theSong = await songSchema.findOne({ _id: songId, artists: userId });
+
+  if (theSong) {
+    const deletingSong = await songSchema.deleteOne({
+      _id: songId,
+      artists: userId,
+    });
+    console.log(deletingSong, "song removed successfully");
+  }
+  const alldata = await userSchema.findOne({ _id: userId });
+
+  console.log(alldata, "the all data");
+
+  const songData = await songSchema.find({ artists: userId });
+  console.log(songData, "the songData");
+
+  res.json({ data: alldata, tracks: songData });
+};
+
+const searchFinder = async(req,res)=>{
+  console.log(req.body,'the fucking body');
 }
 
 module.exports = {
@@ -296,4 +324,6 @@ module.exports = {
   deletePlaylistSongs,
   getPlaylists,
   deletePlaylist,
+  deleteSongs,
+  searchFinder,
 };

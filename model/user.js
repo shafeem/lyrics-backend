@@ -29,9 +29,15 @@ const userSchema = new mongoose.Schema({
   language: {
     type: String,
   },
-  imgUrl:{
-    type:String
-  }
+  imgUrl: {
+    type: String,
+  },
+  likedSongs: [
+    {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Song",
+    },
+  ],
 });
 
 const User = mongoose.model("User", userSchema);
