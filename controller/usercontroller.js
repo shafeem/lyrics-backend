@@ -306,9 +306,43 @@ const deleteSongs = async (req, res) => {
   res.json({ data: alldata, tracks: songData });
 };
 
-const searchFinder = async(req,res)=>{
-  console.log(req.body,'the fucking body');
-}
+const searchFinder = async (req, res) => {
+  console.log(req.body, "the  body");
+};
+
+const likedSongFinder = async (req, res) => {
+  const { userId } = req.body;
+  const user = await userSchema.findById(userId);
+
+  res.json({ userDetails: user });
+};
+
+const handleLikeSongs = async (req, res) => {
+  console.log(req.body, "the body here");
+  const { songId, userId } = req.body;
+
+  const userDetails = await userSchema.findById(userId);
+
+  if (userDetails.likedSongs.includes(songId)) {
+    await userDetails.updateOne({ $pull: { likedSongs: songId } });
+    console.log("song removed successfully");
+  } else {
+    userDetails.likedSongs.push(songId);
+    await userDetails.save();
+    console.log("song added successfully");
+  }
+  const user = await userSchema.findById(userId);
+  res.json({ user: user });
+};
+
+const favoriteSongs = async (req, res) => {
+  const { userId } = req.body;
+
+  const favorites = await userSchema.findById(userId).populate("likedSongs");
+  console.log(favorites.likedSongs,'the favorites songs');
+
+  res.json({ tracks: favorites.likedSongs });
+};
 
 module.exports = {
   userlogin,
@@ -326,4 +360,7 @@ module.exports = {
   deletePlaylist,
   deleteSongs,
   searchFinder,
+  likedSongFinder,
+  handleLikeSongs,
+  favoriteSongs,
 };
