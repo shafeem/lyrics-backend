@@ -20,6 +20,8 @@ const {
   likedSongFinder,
   handleLikeSongs,
   favoriteSongs,
+  addSongToPlaylist,
+  findArtistSongs
 } = require("../controller/usercontroller");
 
 const router = express.Router();
@@ -44,6 +46,8 @@ router.post("/searchFinder",searchFinder)
 router.post("/likedSongFinder",likedSongFinder)
 router.post("/handleLikeSongs",handleLikeSongs)
 router.post("/favoriteSongs",favoriteSongs)
+router.post("/addSongToPlaylist",addSongToPlaylist)
+router.post("/findArtistSongs",findArtistSongs)
 
 
 
