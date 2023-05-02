@@ -306,10 +306,6 @@ const deleteSongs = async (req, res) => {
   res.json({ data: alldata, tracks: songData });
 };
 
-const searchFinder = async (req, res) => {
-  console.log(req.body, "the  body");
-};
-
 const likedSongFinder = async (req, res) => {
   const { userId } = req.body;
   const user = await userSchema.findById(userId);
@@ -339,40 +335,51 @@ const favoriteSongs = async (req, res) => {
   const { userId } = req.body;
 
   const favorites = await userSchema.findById(userId).populate("likedSongs");
-  console.log(favorites.likedSongs,'the favorites songs');
+  console.log(favorites.likedSongs, "the favorites songs");
 
   res.json({ tracks: favorites.likedSongs });
 };
 
-const addSongToPlaylist = async (req,res)=>{
+const addSongToPlaylist = async (req, res) => {
+  const { songId, playId } = req.body;
 
-    const {songId,playId} = req.body;
+  const playlist = await playlistSchema.findById(playId);
+  console.log(playlist, "the playlist");
 
-    const playlist = await playlistSchema.findById(playId)
-    console.log(playlist,'the playlist');
+  if (playlist.songs.includes(songId)) {
+    res.json({ message: "fail" });
+  } else {
+    playlist.songs.push(songId);
+    res.json({ message: "success" });
+  }
+};
 
-    if(playlist.songs.includes(songId)){
-        res.json({message:"fail"})
-    }else{
-        playlist.songs.push(songId);
-        res.json({message:"success"})
-    }
-}
+const findArtistSongs = async (req, res) => {
+  const { artistId } = req.body;
 
-const findArtistSongs = async (req,res)=>{
-    const {artistId} = req.body;
+  console.log(artistId, "the artist Id here");
 
-    console.log(artistId,'the artist Id here');
+  const user = await userSchema.findById(artistId);
+  console.log(user, "the user data");
 
-    const user = await userSchema.findById(artistId);
-    console.log(user,'the user data');
+  const song = await songSchema.find({ artists: artistId });
+  console.log(song, "the song data");
 
-    const song = await songSchema.find({artists:artistId})
-    console.log(song,'the song data');
+  res.json({ tracks: song, artist: user });
+};
 
-    res.json({tracks:song,artist:user})
+const searchFinder = async (req, res) => {
+  console.log(req.body, "the  body");
+  const { term } = req.body;
 
-}
+  const title = new RegExp(term, "i");
+
+  const searchResult = await songSchema.find({ title: title });
+
+  console.log(searchResult, "the search result here");
+
+  res.json({ tracks: searchResult });
+};
 
 module.exports = {
   userlogin,
