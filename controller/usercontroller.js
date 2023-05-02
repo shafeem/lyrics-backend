@@ -116,25 +116,30 @@ const profileSubmit = async (req, res) => {
       req.body;
     console.log(req.body, "the body here");
 
-    const user = await userSchema.findByIdAndUpdate(
-      id,
-      {
-        name: name,
-        email: email,
-        number: mobile,
-        profile: true,
-        dob: dob,
-        location: location,
-        language: language,
-        imgUrl: imgUrl,
-      },
-      {
-        new: true,
-      }
-    );
+    const user = await userSchema
+      .findByIdAndUpdate(
+        id,
+        {
+          name: name,
+          email: email,
+          number: mobile,
+          profile: true,
+          dob: dob,
+          location: location,
+          language: language,
+          imgUrl: imgUrl,
+        },
+        {
+          new: true,
+        }
+      )
+      .then(() => {
+        res.json({ message: "success" });
+      });
 
     console.log(user, "the user here");
   } catch (error) {
+    res.json({ message: "error" });
     console.log(error, "Error");
   }
 };
@@ -381,6 +386,55 @@ const searchFinder = async (req, res) => {
   res.json({ tracks: searchResult });
 };
 
+const songDetails = async (req, res) => {
+  const { id } = req.body;
+  const songData = await songSchema.findById(id);
+  console.log("song fetched successfully");
+  res.json({ data: songData });
+};
+
+const songEditer = async (req, res) => {
+  console.log(req.body, "the req.body");
+
+  const {
+    songName,
+    artistName,
+    language,
+    genre,
+    songImg,
+    songAudio,
+    userId,
+    id,
+  } = req.body;
+
+  const updater = await songSchema
+    .updateOne(
+      { _id: '644ccef7ad9aaeb402328cac' },
+      {
+        $set: {
+          "images.coverart": songImg,
+          title: songName,
+          subtitle: artistName,
+          url: songAudio,
+          language: language,
+          genre: genre,
+        },
+      }
+    ).then((response)=>{
+      console.log(response, "the resppp");
+    if(response.modifiedCount === 1){
+      console.log('edited');
+      res.json({success:true})
+    }else{
+      console.log('no edit hererre');
+      res.json({success:false})
+    }
+    })
+
+
+    
+};
+
 module.exports = {
   userlogin,
   verifyNumber,
@@ -402,4 +456,6 @@ module.exports = {
   favoriteSongs,
   addSongToPlaylist,
   findArtistSongs,
+  songDetails,
+  songEditer,
 };
