@@ -1,7 +1,7 @@
 const jwt = require("jsonwebtoken");
 const userSchema = require("../model/user");
 const songSchema = require("../model/song");
-const playlistShema = require('../model/playlist')
+const playlistShema = require("../model/playlist");
 
 const adminLogin = async (req, res) => {
   try {
@@ -41,7 +41,6 @@ const adminLogin = async (req, res) => {
 
 const userFinder = async (req, res) => {
   const details = await userSchema.find();
-  console.log(details, "the details here");
 
   res.json({ data: details });
 };
@@ -59,11 +58,23 @@ const songFinder = async (req, res) => {
   res.json({ tracks: songs });
 };
 
+const findArtist = async (req, res) => {
+  const artistDetails = await userSchema.find({ type: "artist" });
+
+  res.json({ artistDetails: artistDetails });
+};
+
+const findingUsers = async (req, res) => {
+  const userDetails = await userSchema.find({ type: "user" });
+
+  res.json({ user: userDetails });
+};
 
 module.exports = {
   adminLogin,
   userFinder,
   artistApprover,
   songFinder,
-
+  findArtist,
+  findingUsers,
 };
