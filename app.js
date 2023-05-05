@@ -8,7 +8,7 @@ const adminrouter = require("./routes/adminrouter");
 const app = express();
 
 const corsOptions ={
-  origin: ["http://localhost:3000","https://lyric.onrender.com"],
+  origin: ["https://main.dffrwd7ebpz4s.amplifyapp.com/"],
   methods: ["GET", "POST", "PUT", "DELETE"],
   allowedHeaders:"Content-Type,Authorization",
   optionsSuccessStatus:200,
