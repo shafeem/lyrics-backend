@@ -26,30 +26,32 @@ const {
   songEditer,
 } = require("../controller/usercontroller");
 
+const {tokenVerify} = require("../jwt/auth")
+
 const router = express.Router();
 
-router.get("/songFinder", songFinder);
+router.get("/songFinder",tokenVerify, songFinder);
 
-router.post("/getPlaylists", getPlaylists);
+router.post("/getPlaylists",tokenVerify, getPlaylists);
 router.post("/googleAuth", userlogin);
 router.post("/verifynumber", verifyNumber);
-router.post("/rolechanger", roleChanger);
-router.post("/profileSubmit", profileSubmit);
-router.post("/dataCollector", dataCollector);
-router.post("/songSubmitter", songSubmitter);
-router.post("/createPlaylist", createPlaylist);
-router.post("/addPlaylistSong", addPlaylistSong);
-router.post("/playlistSubmitter", playlistSubmitter);
-router.post("/deletePlaylistSongs", deletePlaylistSongs);
-router.post("/deletePlaylist", deletePlaylist);
-router.post("/deleteSongs", deleteSongs);
-router.post("/searchFinder", searchFinder);
-router.post("/likedSongFinder", likedSongFinder);
-router.post("/handleLikeSongs", handleLikeSongs);
+router.post("/rolechanger",tokenVerify, roleChanger);
+router.post("/profileSubmit",tokenVerify, profileSubmit);
+router.post("/dataCollector",tokenVerify, dataCollector);
+router.post("/songSubmitter",tokenVerify, songSubmitter);
+router.post("/createPlaylist",tokenVerify, createPlaylist);
+router.post("/addPlaylistSong",tokenVerify, addPlaylistSong);
+router.post("/playlistSubmitter",tokenVerify, playlistSubmitter);
+router.post("/deletePlaylistSongs",tokenVerify, deletePlaylistSongs);
+router.post("/deletePlaylist",tokenVerify, deletePlaylist);
+router.post("/deleteSongs",tokenVerify, deleteSongs);
+router.post("/searchFinder",tokenVerify, searchFinder);
+router.post("/likedSongFinder",tokenVerify, likedSongFinder);
+router.post("/handleLikeSongs",tokenVerify, handleLikeSongs);
 router.post("/favoriteSongs", favoriteSongs);
-router.post("/addSongToPlaylist", addSongToPlaylist);
-router.post("/findArtistSongs", findArtistSongs);
-router.post("/songDetails", songDetails);
-router.post("/songEditer", songEditer);
+router.post("/addSongToPlaylist",tokenVerify, addSongToPlaylist);
+router.post("/findArtistSongs",tokenVerify, findArtistSongs);
+router.post("/songDetails",tokenVerify, songDetails);
+router.post("/songEditer",tokenVerify, songEditer);
 
 module.exports = router;

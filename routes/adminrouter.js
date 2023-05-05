@@ -9,16 +9,18 @@ const {
   findingUsers
 } = require("../controller/admincontroller");
 
+const {tokenVerify} = require("../jwt/auth")
+
 const router = express.Router();
 
-router.get("/songFinder", songFinder);
-router.get("/userFinder", userFinder);
-router.get("/findArtist",findArtist)
-router.get("/findingUsers",findingUsers)
+router.get("/songFinder",tokenVerify, songFinder);
+router.get("/userFinder",tokenVerify, userFinder);
+router.get("/findArtist",tokenVerify,findArtist)
+router.get("/findingUsers",tokenVerify,findingUsers)
 
 
 router.post("/adminVerify", adminLogin);
-router.post("/artistApprover", artistApprover);
+router.post("/artistApprover",tokenVerify, artistApprover);
 
 
 module.exports = router;

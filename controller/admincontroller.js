@@ -8,7 +8,7 @@ const adminLogin = async (req, res) => {
     const email = process.env.ADMIN_EMAIL;
     const pw = process.env.ADMIN_PASSWRD;
 
-    console.log(req.query, "this is the datas");
+    console.log(req.body, "this is the datas");
     const { Email, password } = req.query;
     console.log(Email, password, "datas");
 

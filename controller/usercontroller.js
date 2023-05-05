@@ -346,6 +346,7 @@ const favoriteSongs = async (req, res) => {
 };
 
 const addSongToPlaylist = async (req, res) => {
+  console.log(req.body,'<><><><><><><><><><><><<><><><><><><><><><');
   const { songId, playId } = req.body;
 
   const playlist = await playlistSchema.findById(playId);
@@ -355,6 +356,7 @@ const addSongToPlaylist = async (req, res) => {
     res.json({ message: "fail" });
   } else {
     playlist.songs.push(songId);
+    playlist.save()
     res.json({ message: "success" });
   }
 };
