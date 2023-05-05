@@ -8,7 +8,7 @@ const adminrouter = require("./routes/adminrouter");
 const app = express();
 
 const corsOptions ={
-  origin: ["https://main.dffrwd7ebpz4s.amplifyapp.com"],
+  origin: ["https://main.djaxxiuk91a35.amplifyapp.com"],
   methods: ["GET", "POST", "PUT", "DELETE"],
   allowedHeaders:"Content-Type,Authorization",
   optionsSuccessStatus:200,
