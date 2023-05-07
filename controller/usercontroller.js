@@ -116,7 +116,7 @@ const profileSubmit = async (req, res) => {
       req.body;
     console.log(req.body, "the body here");
 
-    const user = await userSchema
+    const userDetails = await userSchema
       .findByIdAndUpdate(
         id,
         {
@@ -133,8 +133,9 @@ const profileSubmit = async (req, res) => {
           new: true,
         }
       )
-      .then(() => {
-        res.json({ message: "success" });
+      .then((response) => {
+        console.log(userDetails,'');
+        res.json({ message: "success", userData: userDetails });
       });
 
     console.log(user, "the user here");
@@ -346,7 +347,7 @@ const favoriteSongs = async (req, res) => {
 };
 
 const addSongToPlaylist = async (req, res) => {
-  console.log(req.body,'<><><><><><><><><><><><<><><><><><><><><><');
+  console.log(req.body, "<><><><><><><><><><><><<><><><><><><><><><");
   const { songId, playId } = req.body;
 
   const playlist = await playlistSchema.findById(playId);
@@ -356,7 +357,7 @@ const addSongToPlaylist = async (req, res) => {
     res.json({ message: "fail" });
   } else {
     playlist.songs.push(songId);
-    playlist.save()
+    playlist.save();
     res.json({ message: "success" });
   }
 };
@@ -411,7 +412,7 @@ const songEditer = async (req, res) => {
 
   const updater = await songSchema
     .updateOne(
-      { _id: '644ccef7ad9aaeb402328cac' },
+      { _id: "644ccef7ad9aaeb402328cac" },
       {
         $set: {
           "images.coverart": songImg,
@@ -422,19 +423,17 @@ const songEditer = async (req, res) => {
           genre: genre,
         },
       }
-    ).then((response)=>{
+    )
+    .then((response) => {
       console.log(response, "the resppp");
-    if(response.modifiedCount === 1){
-      console.log('edited');
-      res.json({success:true})
-    }else{
-      console.log('no edit hererre');
-      res.json({success:false})
-    }
-    })
-
-
-    
+      if (response.modifiedCount === 1) {
+        console.log("edited");
+        res.json({ success: true });
+      } else {
+        console.log("no edit hererre");
+        res.json({ success: false });
+      }
+    });
 };
 
 module.exports = {
