@@ -8,8 +8,7 @@ const adminLogin = async (req, res) => {
     const email = process.env.ADMIN_EMAIL;
     const pw = process.env.ADMIN_PASSWRD;
 
-    console.log(req.body, "this is the datas");
-    const { Email, password } = req.query;
+    const { Email, password } = req.body;
     console.log(Email, password, "datas");
 
     if (Email !== undefined && password !== undefined) {
@@ -46,10 +45,13 @@ const userFinder = async (req, res) => {
 };
 
 const artistApprover = async (req, res) => {
-  console.log("its working");
-  const id = req.body.data[0]._id;
+  console.log("its working",req.body);
+  const {id} = req.body
 
   await userSchema.updateOne({ _id: id }, { $set: { type: "artist" } });
+
+  const data = await userSchema.find();
+  res.json({data:data});
 };
 
 const songFinder = async (req, res) => {

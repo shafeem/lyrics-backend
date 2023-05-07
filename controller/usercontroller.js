@@ -112,38 +112,33 @@ const roleChanger = async (req, res) => {
 
 const profileSubmit = async (req, res) => {
   try {
-    const { name, email, dob, mobile, location, language, id, imgUrl } =
-      req.body;
+    const { name, email, dob, mobile, location, language, id, imgUrl } = req.body;
     console.log(req.body, "the body here");
 
-    const userDetails = await userSchema
-      .findByIdAndUpdate(
-        id,
-        {
-          name: name,
-          email: email,
-          number: mobile,
-          profile: true,
-          dob: dob,
-          location: location,
-          language: language,
-          imgUrl: imgUrl,
-        },
-        {
-          new: true,
-        }
-      )
-      .then((response) => {
-        console.log(userDetails,'');
-        res.json({ message: "success", userData: userDetails });
-      });
+    const userDetails = await userSchema.findByIdAndUpdate(
+      id,
+      {
+        name: name,
+        email: email,
+        number: mobile,
+        profile: true,
+        dob: dob,
+        location: location,
+        language: language,
+        imgUrl: imgUrl,
+      },
+      {
+        new: true,
+      }
+    );
 
-    console.log(user, "the user here");
+    res.json({ message: "success", userDetails });
+    console.log(userDetails, "the user details here");
   } catch (error) {
-    res.json({ message: "error" });
     console.log(error, "Error");
   }
 };
+
 
 const dataCollector = async (req, res) => {
   const { userId } = req.body;
