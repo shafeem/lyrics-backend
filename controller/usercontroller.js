@@ -58,12 +58,12 @@ const verifyNumber = async (req, res) => {
   console.log(req.body);
   const { number } = req.body;
 
-  const user = await userSchema.findOne({ number: number });
+  const user = await userSchema.findOne({ number: number  });
   let userId;
   let userType;
   let profile;
 
-  if (user) {
+  if (user !=null) {
     console.log("existing user here");
     userId = user._id;
     userType = user.type;
@@ -72,8 +72,11 @@ const verifyNumber = async (req, res) => {
     console.log("user not existing here");
     const newUser = new userSchema({
       number: number,
+      email:""
     });
+    console.log("1101")
     await newUser.save();
+    console.log("111")
 
     const user = await userSchema.findOne({ number: number });
 

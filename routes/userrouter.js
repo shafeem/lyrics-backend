@@ -30,7 +30,7 @@ const {tokenVerify} = require("../jwt/auth")
 
 const router = express.Router();
 
-router.get("/songFinder",tokenVerify, songFinder);
+router.get("/songFinder", songFinder);
 
 router.post("/getPlaylists",tokenVerify, getPlaylists);
 router.post("/googleAuth", userlogin);
@@ -45,10 +45,10 @@ router.post("/playlistSubmitter",tokenVerify, playlistSubmitter);
 router.post("/deletePlaylistSongs",tokenVerify, deletePlaylistSongs);
 router.post("/deletePlaylist",tokenVerify, deletePlaylist);
 router.post("/deleteSongs",tokenVerify, deleteSongs);
-router.post("/searchFinder",tokenVerify, searchFinder);
+router.post("/searchFinder", searchFinder);
 router.post("/likedSongFinder",tokenVerify, likedSongFinder);
 router.post("/handleLikeSongs",tokenVerify, handleLikeSongs);
-router.post("/favoriteSongs", favoriteSongs);
+router.post("/favoriteSongs",tokenVerify, favoriteSongs);
 router.post("/addSongToPlaylist",tokenVerify, addSongToPlaylist);
 router.post("/findArtistSongs",tokenVerify, findArtistSongs);
 router.post("/songDetails",tokenVerify, songDetails);

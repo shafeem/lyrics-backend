@@ -39,9 +39,14 @@ const adminLogin = async (req, res) => {
 };
 
 const userFinder = async (req, res) => {
-  const details = await userSchema.find();
+  const user = await userSchema.find({type:"user"});
+  console.log(user,'the user data')
+  const artist = await userSchema.find({type:"artist"});
+  const pending = await userSchema.find({type:"pending"})
 
-  res.json({ data: details });
+console.log(user,artist,pending,'all the data of the user here')
+
+  res.json({ user,artist,pending });
 };
 
 const artistApprover = async (req, res) => {
