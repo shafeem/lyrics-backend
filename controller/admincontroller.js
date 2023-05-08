@@ -73,6 +73,7 @@ const findArtist = async (req, res) => {
 
 const findingUsers = async (req, res) => {
   const userDetails = await userSchema.find({ type: "user" });
+  console.log(userDetails,'the userDetails');
 
   res.json({ user: userDetails });
 };
