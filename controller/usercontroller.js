@@ -58,12 +58,12 @@ const verifyNumber = async (req, res) => {
   console.log(req.body);
   const { number } = req.body;
 
-  const user = await userSchema.findOne({ number: number  });
+  const user = await userSchema.findOne({ number: number });
   let userId;
   let userType;
   let profile;
 
-  if (user !=null) {
+  if (user != null) {
     console.log("existing user here");
     userId = user._id;
     userType = user.type;
@@ -72,11 +72,11 @@ const verifyNumber = async (req, res) => {
     console.log("user not existing here");
     const newUser = new userSchema({
       number: number,
-      email:""
+      email: "",
     });
-    console.log("1101")
+    console.log("1101");
     await newUser.save();
-    console.log("111")
+    console.log("111");
 
     const user = await userSchema.findOne({ number: number });
 
@@ -115,7 +115,8 @@ const roleChanger = async (req, res) => {
 
 const profileSubmit = async (req, res) => {
   try {
-    const { name, email, dob, mobile, location, language, id, imgUrl } = req.body;
+    const { name, email, dob, mobile, location, language, id, imgUrl } =
+      req.body;
     console.log(req.body, "the body here");
 
     const userDetails = await userSchema.findByIdAndUpdate(
@@ -142,7 +143,6 @@ const profileSubmit = async (req, res) => {
   }
 };
 
-
 const dataCollector = async (req, res) => {
   const { userId } = req.body;
 
@@ -150,7 +150,9 @@ const dataCollector = async (req, res) => {
 
   console.log(alldata, "the all data");
 
-  const songData = await songSchema.find({ artists: userId });
+  const songData = await songSchema.find({
+    artists: userId,
+  });
   console.log(songData, "the songData");
 
   res.json({ data: alldata, tracks: songData });
@@ -182,13 +184,14 @@ const songSubmitter = async (req, res) => {
     url: songAudio,
     language: language,
     genre: genre,
+    status: "pending",
   });
 
   await songUpload.save();
 };
 
 const songFinder = async (req, res) => {
-  const songs = await songSchema.find();
+  const songs = await songSchema.find({ status: "success" });
   res.json({ tracks: songs });
 };
 
@@ -304,7 +307,10 @@ const deleteSongs = async (req, res) => {
 
   console.log(alldata, "the all data");
 
-  const songData = await songSchema.find({ artists: userId });
+  const songData = await songSchema.find({
+    artists: userId,
+    status: "success",
+  });
   console.log(songData, "the songData");
 
   res.json({ data: alldata, tracks: songData });
@@ -368,7 +374,7 @@ const findArtistSongs = async (req, res) => {
   const user = await userSchema.findById(artistId);
   console.log(user, "the user data");
 
-  const song = await songSchema.find({ artists: artistId });
+  const song = await songSchema.find({ artists: artistId, status: "success" });
   console.log(song, "the song data");
 
   res.json({ tracks: song, artist: user });
@@ -380,7 +386,10 @@ const searchFinder = async (req, res) => {
 
   const title = new RegExp(term, "i");
 
-  const searchResult = await songSchema.find({ title: title });
+  const searchResult = await songSchema.find({
+    title: title,
+    status: "success",
+  });
 
   console.log(searchResult, "the search result here");
 
@@ -407,10 +416,11 @@ const songEditer = async (req, res) => {
     userId,
     id,
   } = req.body;
+  console.log(id,'the id herer');
 
   const updater = await songSchema
     .updateOne(
-      { _id: "644ccef7ad9aaeb402328cac" },
+      { _id: id },
       {
         $set: {
           "images.coverart": songImg,

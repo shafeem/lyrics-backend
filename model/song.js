@@ -25,6 +25,9 @@ const songSchema = new mongoose.Schema({
   genre: {
     type: String,
   },
+  status:{
+    type:String,
+  }
 });
 
 const Song = mongoose.model("Song", songSchema);

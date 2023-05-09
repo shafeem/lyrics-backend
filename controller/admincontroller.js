@@ -39,30 +39,31 @@ const adminLogin = async (req, res) => {
 };
 
 const userFinder = async (req, res) => {
-  const user = await userSchema.find({type:"user"});
-  console.log(user,'the user data')
-  const artist = await userSchema.find({type:"artist"});
-  const pending = await userSchema.find({type:"pending"})
+  const user = await userSchema.find({ type: "user" });
+  console.log(user, "the user data");
+  const artist = await userSchema.find({ type: "artist" });
+  const pending = await userSchema.find({ type: "pending" });
 
-console.log(user,artist,pending,'all the data of the user here')
+  console.log(user, artist, pending, "all the data of the user here");
 
-  res.json({ user,artist,pending });
+  res.json({ user, artist, pending });
 };
 
 const artistApprover = async (req, res) => {
-  console.log("its working",req.body);
-  const {id} = req.body
+  console.log("its working", req.body);
+  const { id } = req.body;
 
   await userSchema.updateOne({ _id: id }, { $set: { type: "artist" } });
 
   const data = await userSchema.find();
-  res.json({data:data});
+  res.json({ data: data });
 };
 
 const songFinder = async (req, res) => {
-  const songs = await songSchema.find();
+  const songs = await songSchema.find({ status: "success" });
+  const pending = await songSchema.find({ status: "pending" });
 
-  res.json({ tracks: songs });
+  res.json({ tracks: songs, pending: pending });
 };
 
 const findArtist = async (req, res) => {
@@ -73,9 +74,35 @@ const findArtist = async (req, res) => {
 
 const findingUsers = async (req, res) => {
   const userDetails = await userSchema.find({ type: "user" });
-  console.log(userDetails,'the userDetails');
+  console.log(userDetails, "the userDetails");
 
   res.json({ user: userDetails });
+};
+
+const songRefuser = async (req, res) => {
+  const { id } = req.body;
+  console.log("the song refuser", id);
+
+  const song = await songSchema.updateOne({_id:id},{
+    $set: {
+      status:"failed",
+    }
+  })
+  console.log('song refused' );
+  res.json({song:song})
+};
+
+const songApprover = async (req, res) => {
+  const { id } = req.body;
+  console.log("the song approver", id);
+
+  const song = await songSchema.updateOne({_id:id},{
+    $set:{
+      status: 'success'
+    }
+  })
+  console.log('song approved Successfully');
+  res.json({song:song})
 };
 
 module.exports = {
@@ -85,4 +112,6 @@ module.exports = {
   songFinder,
   findArtist,
   findingUsers,
+  songRefuser,
+  songApprover,
 };
